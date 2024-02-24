@@ -55,6 +55,7 @@ def choose_domain(update, context):
     return WAIT_SUBDOMAIN
 
     def wait_subdomain(update, context):
+    # Indentasi baris-baris kode di dalam fungsi
     user_id = update.message.from_user.id
     user_data = user_ips.get(user_id, {})  
 
@@ -70,6 +71,7 @@ def choose_domain(update, context):
     #menunggu pengguna memasukan alamat IP
     context.bot.send_message(chat_id=user_id, text="Masukkan IP server Hosting/Bug/VPS Kamu:", reply_markup=ReplyKeyboardRemove())
     return WAIT_IP
+
     
     def wait_ip(update, context):
     user_id = update.message.from_user.id
