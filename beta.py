@@ -66,12 +66,29 @@ def wait_ip(update, context):
 
     # Membuat string acak untuk subdomain
     #random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))
+    # ... imports 
+
+def wait_subdomain(update, context):
+    user_id = update.message.from_user.id
+    user_data = user_ips[user_id]
+
+    if 'domain' not in user_data:
+        context.bot.send_message(chat_id=user_id, text="Terjadi kesalahan. Silakan coba lagi.")
+        return cancel(update, context)
+
+    # Input nama subdomain
     reply_keyboard = [['Cancel']]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
     context.bot.send_message(chat_id=user_id, text="Masukkan subdomain:", reply_markup=markup)
-    subdomain = f"{subdomain}"
-    
     return 'wait_subdomain'
+
+def wait_subdomain(update, context):  # Perhatikan indentasi yang benar!
+    user_id = update.message.from_user.id
+    user_data = user_ips[user_id]
+    subdomain = update.message.text  # Assuming we take subdomain as input
+
+    # ... (Sisa logika Anda untuk menangani subdomain di Cloudflare) 
+
 
     # Mengelola subdomain di Cloudflare
     cf = CloudFlare(email=CLOUDFLARE_EMAIL, token=CLOUDFLARE_API_KEY)
