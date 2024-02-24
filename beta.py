@@ -64,8 +64,6 @@ def wait_ip(update, context):
         context.bot.send_message(chat_id=user_id, text="Terjadi kesalahan. Silakan coba lagi.")
         return cancel(update, context)
 
-    # Membuat string acak untuk subdomain
-    #random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))
     # ... imports 
 
 def wait_subdomain(update, context):
@@ -81,6 +79,19 @@ def wait_subdomain(update, context):
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
     context.bot.send_message(chat_id=user_id, text="Masukkan subdomain:", reply_markup=markup)
     return 'wait_subdomain'
+
+# ... Di dalam fungsi wait_subdomain
+
+    try:
+        cf.zones.dns_records.post(zone_id, data=record)
+        # ... (Sisa kode untuk mengirim pesan)
+
+    except CloudFlare.exceptions.CloudFlareAPIError as e:
+        print(f"Cloudflare API Error: {e}")
+        context.bot.send_message(chat_id=user_id, text="Terjadi kesalahan Cloudflare saat membuat subdomain. Silakan coba lagi atau hubungi support.")
+
+     # ... (Sisa kode)
+     
 
 def wait_subdomain(update, context):  # Perhatikan indentasi yang benar!
     user_id = update.message.from_user.id
