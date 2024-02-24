@@ -56,11 +56,11 @@ def choose_domain(update, context):
 
     def wait_subdomain(update, context):
     user_id = update.message.from_user.id
-    user_data = user_ips.get(user_id, {})  # Get user data with safe default
-    
+    user_data = user_ips.get(user_id, {})  
+
     subdomain = update.message.text.lower()
 
-# Validasi Subdomain Dasar
+    # Validasi Subdomain Dasar
     if not subdomain.isalnum() or len(subdomain) < 4:
         context.bot.send_message(chat_id=user_id, text="Subdomain tidak valid. Hanya karakter alfanumerik, minimal 4 karakter.")
         return WAIT_SUBDOMAIN
