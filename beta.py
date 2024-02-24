@@ -75,6 +75,11 @@ def wait_ip(update, context):
 
 # Mengatur state agar bot tahu kita sedang menunggu subdomain
     return 'wait_subdomain'
+    
+def wait_subdomain(update, context):
+    user_id = update.message.from_user.id
+    user_data = user_ips[user_id]
+    user_data['subdomain'] = update.message.text
 
     # Mengelola subdomain di Cloudflare
     cf = CloudFlare(email=CLOUDFLARE_EMAIL, token=CLOUDFLARE_API_KEY)
@@ -90,7 +95,7 @@ def wait_ip(update, context):
 
     record = {
         'type': 'A',
-        'name': f"{subdomain}.{user_data['domain']}",
+        'name': f"user_data['subdomain'].{user_data['domain']}",
         'content': user_data['ip'],
     }
 
