@@ -6,7 +6,7 @@ import random
 import string
 
 # Ganti dengan token bot Telegram Anda
-TELEGRAM_TOKEN = '6573899040:AAEKYvNAIyyVrv-2WVlUjAwuYPGJVYs85QU'
+TELEGRAM_TOKEN = '7045651779:AAFUJTYLVVwgGXNVrlkd5OtwYWsJq2sJCQQ'
 
 # Ganti dengan API Key Cloudflare Anda
 CLOUDFLARE_API_KEY = '4c6c88b6cffbe2f738489f5cb1612700f17f3'
@@ -66,19 +66,12 @@ def wait_ip(update, context):
 
     # Membuat string acak untuk subdomain
     #random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))
-    #subdomain = f"{random_string}"
-
-# Menggunakan keyboard khusus untuk memudahkan input subdomain
     reply_keyboard = [['Cancel']]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
-    context.bot.send_message(chat_id=user_id, text="Masukkan subdomain yang kamu inginkan:", reply_markup=markup)
-
-# Mengatur state agar bot tahu kita sedang menunggu subdomain
-    return 'wait_subdomain'
+    context.bot.send_message(chat_id=user_id, text="Masukkan subdomain:", reply_markup=markup)
+    subdomain = f"{subdomain}"
     
-def wait_subdomain(update, context):
-    user_id = update.message.from_user.id
-    user_data['subdomain'] = update.message.text
+    return 'wait_subdomain'
 
     # Mengelola subdomain di Cloudflare
     cf = CloudFlare(email=CLOUDFLARE_EMAIL, token=CLOUDFLARE_API_KEY)
@@ -94,14 +87,14 @@ def wait_subdomain(update, context):
 
     record = {
         'type': 'A',
-        'name': user_data['subdomain'].user_data['domain'],
+        'name': f"{subdomain}.{user_data['domain']}",
         'content': user_data['ip'],
     }
 
     try:
         cf.zones.dns_records.post(zone_id, data=record)
         # Mengirimkan pesan ke pengguna dengan subdomain yang dibuat
-        message = f"Subdomain Berhasil dibuat.\n\nDOMAIN : {user_data['domain']}\nIP : {user_data['ip']}\n\nSubdomain Kamu : {user_data['subdomain']}.{user_data['domain']}\n\nBot Created BY : @ctrxzip.\nID Kamu : {user_id}\n"
+        message = f"Subdomain Berhasil dibuat.\n\nDOMAIN : {user_data['domain']}\nIP : {user_data['ip']}\n\nSubdomain Kamu :\n{subdomain}.{user_data['domain']}\n\nBot Created BY : @ctrxzip.\nID Kamu : {user_id}\n"
         context.bot.send_message(chat_id=user_id, text=message)
     except Exception as e:
         print(f"Error creating DNS record: {e}")
