@@ -78,7 +78,6 @@ def wait_ip(update, context):
     
 def wait_subdomain(update, context):
     user_id = update.message.from_user.id
-    user_data = user_ips[user_id]
     user_data['subdomain'] = update.message.text
 
     # Mengelola subdomain di Cloudflare
@@ -95,14 +94,14 @@ def wait_subdomain(update, context):
 
     record = {
         'type': 'A',
-        'name': user_data['subdomain'].{user_data['domain']},
+        'name': user_data['subdomain'].user_data['domain'],
         'content': user_data['ip'],
     }
 
     try:
         cf.zones.dns_records.post(zone_id, data=record)
         # Mengirimkan pesan ke pengguna dengan subdomain yang dibuat
-        message = f"Subdomain Berhasil dibuat.\n\nDOMAIN : {user_data['domain']}\nIP : {user_data['ip']}\n\nSubdomain Kamu :\n{user_data['subdomain']}.{user_data['domain']}\n\nBot Created BY : @ctrxzip.\nID Kamu : {user_id}\n"
+        message = f"Subdomain Berhasil dibuat.\n\nDOMAIN : {user_data['domain']}\nIP : {user_data['ip']}\n\nSubdomain Kamu : {user_data['subdomain']}.{user_data['domain']}\n\nBot Created BY : @ctrxzip.\nID Kamu : {user_id}\n"
         context.bot.send_message(chat_id=user_id, text=message)
     except Exception as e:
         print(f"Error creating DNS record: {e}")
