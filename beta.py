@@ -57,7 +57,7 @@ def choose_domain(update, context):
     def wait_subdomain(update, context):
     # Indentasi baris-baris kode di dalam fungsi
     user_id = update.message.from_user.id
-    user_data = user_ips.get(user_id, {})  
+    user_data = user_ips.get(user_id, {})
 
     subdomain = update.message.text.lower()
 
@@ -77,6 +77,10 @@ def choose_domain(update, context):
     user_id = update.message.from_user.id
     user_data = user_ips[user_id]
     user_data['ip'] = update.message.text
+    
+    if 'domain' not in user_data:
+        context.bot.send_message(chat_id=user_id, text="Terjadi kesalahan. Silakan coba lagi.")
+        return cancel(update, context)
 
     # Mengelola subdomain di Cloudflare
     cf = CloudFlare(email=CLOUDFLARE_EMAIL, token=CLOUDFLARE_API_KEY)
