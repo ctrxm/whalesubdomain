@@ -20,9 +20,10 @@ def start(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text="Selamat Datang Di Whale Subdomain🐳!, ini adalah layanan subdomain gratis dan otomatis dengan menggunakan API Cloudflare!\n\nSilahkan gunakan layanan ini dengan baik,kami tidak mengizinkan subdomain untuk tindakan ilegal cth : phising/scam/web judi\n")
 
     # Pilihan domain
-    reply_keyboard = [["🛫 XVA.LTD", "🛫 GAFOQE.COM", "🛬 GARUDASHIELD.COM"], ["❌ Cancel"]]
+    reply_keyboard = [['🛫 XVA.LTD', '🛫 GAFOQE.COM', '🛬 GARUDASHIELD.COM'], ['❌ Cancel']]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
-    bot.send_message(chat_id=user_id, text="Pilih domain yang tersedia:", reply_markup=markup)
+    context.bot.send_message(chat_id=user_id, text="Pilih domain yang tersedia:", reply_markup=markup)
+
 
 
     # Mengatur state agar bot tahu kita sedang menunggu pemilihan domain
