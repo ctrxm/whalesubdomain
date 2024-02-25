@@ -6,15 +6,16 @@ import random
 import string
 
 # Ganti dengan token bot Telegram Anda
-TELEGRAM_TOKEN = '6573899040:AAEKYvNAIyyVrv-2WVlUjAwuYPGJVYs85QU'
+TELEGRAM_TOKEN = '7045651779:AAFUJTYLVVwgGXNVrlkd5OtwYWsJq2sJCQQ'
 
 # Ganti dengan API Key Cloudflare Anda
 CLOUDFLARE_API_KEY = '4c6c88b6cffbe2f738489f5cb1612700f17f3'
 CLOUDFLARE_EMAIL = 'hendra1rangga@gmail.com'
 
 # Dictionary untuk menyimpan pilihan domain
-user_data = {}  # Penyederhanaan penyimpanan data
+user_data = {}
 user_ips = {}
+  # Penyederhanaan penyimpanan data
 
 def start(update, context):
     user_id = update.message.from_user.id
@@ -106,6 +107,7 @@ def main():
         entry_points=[CommandHandler('start', start)],
         states={
             'wait_domain': [MessageHandler(Filters.text & ~Filters.command, wait_domain)],
+            'wait_subdomain': [MessageHandler(Filters.text & ~Filters.command, wait_subdomain)],
             'wait_ip': [MessageHandler(Filters.text & ~Filters.command, wait_ip)],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
