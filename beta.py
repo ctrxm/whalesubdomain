@@ -14,6 +14,7 @@ CLOUDFLARE_EMAIL = 'hendra1rangga@gmail.com'
 
 # Dictionary untuk menyimpan pilihan domain
 user_data = {}  # Penyederhanaan penyimpanan data
+user_ips = {}
 
 def start(update, context):
     user_id = update.message.from_user.id
