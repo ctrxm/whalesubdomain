@@ -20,7 +20,7 @@ def start(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text="Selamat Datang Di Whale Subdomain🐳!, ini adalah layanan subdomain gratis dan otomatis dengan menggunakan API Cloudflare!\n\nSilahkan gunakan layanan ini dengan baik,kami tidak mengizinkan subdomain untuk tindakan ilegal cth : phising/scam/web judi\n")
 
     # Pilihan domain
-    reply_keyboard = [['🛫 XVA.LTD', '🛫 GAFOQE.COM', '🛬 GARUDASHIELD.COM'], ['❌ Cancel']]
+    reply_keyboard = [['🥇 XVA.LTD', '🥈 GAFOQE.COM', '🥉 GARUDASHIELD.COM'], ['❌ Cancel']]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
     context.bot.send_message(chat_id=user_id, text="Pilih domain yang tersedia:", reply_markup=markup)
 
@@ -41,7 +41,7 @@ def wait_domain(update, context):
     user_id = update.message.from_user.id
     selected_domain = update.message.text.lower()
 
-    if selected_domain not in ['xva.ltd', 'gafoqe.com', 'garudashield.com', 'cancel']:
+    if selected_domain not in ['🥇 xva.ltd', '🥈 gafoqe.com', '🥉 garudashield.com', '❌ cancel']:
         context.bot.send_message(chat_id=user_id, text="Pilihan domain tidak valid. Silakan pilih domain yang benar.")
         return 'wait_domain'
     elif selected_domain == 'cancel':
