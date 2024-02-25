@@ -6,29 +6,25 @@ import random
 import string
 
 # Ganti dengan token bot Telegram Anda
-TELEGRAM_TOKEN = '6573899040:AAEKYvNAIyyVrv-2WVlUjAwuYPGJVYs85QU'
+TELEGRAM_TOKEN = '7045651779:AAFUJTYLVVwgGXNVrlkd5OtwYWsJq2sJCQQ'
 
 # Ganti dengan API Key Cloudflare Anda
 CLOUDFLARE_API_KEY = '4c6c88b6cffbe2f738489f5cb1612700f17f3'
 CLOUDFLARE_EMAIL = 'hendra1rangga@gmail.com'
 
-# Dictionary untuk menyimpan alamat IP server pengguna
-user_ips = {}
-
-# Status percakapan
-CHOOSE_DOMAIN, WAIT_SUBDOMAIN, WAIT_IP = range(3) 
+# Dictionary untuk menyimpan pilihan domain
+user_data = {}  # Penyederhanaan penyimpanan data
 
 def start(update, context):
     user_id = update.message.from_user.id
     context.bot.send_message(chat_id=update.message.chat_id, text="Selamat Datang Di Whale Subdomain🐳!, ini adalah layanan subdomain gratis dan otomatis dengan menggunakan API Cloudflare!\n\nSilahkan gunakan layanan ini dengan baik,kami tidak mengizinkan subdomain untuk tindakan ilegal cth : phising/scam/web judi\n")
 
-    # Pilihan domain
+    # Domain options
     reply_keyboard = [['XVA.LTD', 'GAFOQE.COM', 'Cancel']]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
-    context.bot.send_message(chat_id=user_id, text="Pilih domain yang tersedia:", reply_markup=markup)
+    context.bot.send_message(chat_id=update.message.chat_id, text="Pilih domain yang tersedia:", reply_markup=markup)
 
-    # Mengatur state agar bot tahu kita sedang menunggu pemilihan domain
-    return CHOOSE_DOMAIN
+    return 'wait_domain'
 
 def cancel(update, context):
     user_id = update.message.from_user.id
@@ -38,49 +34,36 @@ def cancel(update, context):
         del user_ips[user_id]
     return ConversationHandler.END
 
-def choose_domain(update, context):
+def wait_domain(update, context):
     user_id = update.message.from_user.id
     selected_domain = update.message.text.lower()
 
     if selected_domain not in ['xva.ltd', 'gafoqe.com', 'cancel']:
         context.bot.send_message(chat_id=user_id, text="Pilihan domain tidak valid. Silakan pilih domain yang benar.")
-        return CHOOSE_DOMAIN
+        return 'wait_domain'
     elif selected_domain == 'cancel':
         return cancel(update, context)
 
-    user_ips[user_id] = {'domain': selected_domain}
     
-    #menunggu pengguna mengetik subdomain
-    context.bot.send_message(chat_id=user_id, text="Masukkan subdomain yang kamu inginkan: (contoh: subdomainKu)", reply_markup=ReplyKeyboardRemove())
-    return WAIT_SUBDOMAIN
+    user_data[user_id] = {'domain': selected_domain} 
+    context.bot.send_message(chat_id=user_id, text="Masukkan subdomain yang diinginkan:", reply_markup=ReplyKeyboardRemove())
+    return 'wait_subdomain'  # State baru untuk menunggu subdomain 
 
-    def wait_subdomain(update, context):
-    # Indentasi baris-baris kode di dalam fungsi
+def wait_subdomain(update, context):
     user_id = update.message.from_user.id
-    user_data = user_ips.get(user_id, {})
-
-    subdomain = update.message.text.lower()
-
-    # Validasi Subdomain Dasar
-    if not subdomain.isalnum() or len(subdomain) < 4:
-        context.bot.send_message(chat_id=user_id, text="Subdomain tidak valid. Hanya karakter alfanumerik, minimal 4 karakter.")
-        return WAIT_SUBDOMAIN
-
-    user_data['subdomain'] = subdomain
-
-    #menunggu pengguna memasukan alamat IP
-    context.bot.send_message(chat_id=user_id, text="Masukkan IP server Hosting/Bug/VPS Kamu:", reply_markup=ReplyKeyboardRemove())
-    return WAIT_IP
-
+    user_data[user_id]['subdomain'] = update.message.text.lower()
     
-    def wait_ip(update, context):
+    context.bot.send_message(chat_id=user_id, text="Masukkan IP server Hosting/Bug/VPS Anda:", reply_markup=ReplyKeyboardRemove())
+    return 'wait_ip'
+
+def wait_ip(update, context):
     user_id = update.message.from_user.id
-    user_data = user_ips[user_id]
-    user_data['ip'] = update.message.text
-    
+    user_data[user_id]['ip'] = update.message.text 
+
     if 'domain' not in user_data:
         context.bot.send_message(chat_id=user_id, text="Terjadi kesalahan. Silakan coba lagi.")
         return cancel(update, context)
+
 
     # Mengelola subdomain di Cloudflare
     cf = CloudFlare(email=CLOUDFLARE_EMAIL, token=CLOUDFLARE_API_KEY)
