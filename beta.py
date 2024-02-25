@@ -79,7 +79,7 @@ def wait_ip(update, context):
     elif user_data['domain'] == 'gafoqe.com':
         zone_id = '45b2d3902a429f40c86fb435477de110'
     elif user_data['domain'] == 'garudashield.com':
-        zone_id = '45b2d3902a429f40c86fb435477de110'
+        zone_id = 'dec253b052e3f2e7d40b91a2aabdd575'
     else:
         context.bot.send_message(chat_id=user_id, text="Terjadi kesalahan. Silakan coba lagi.")
         return cancel(update, context)
